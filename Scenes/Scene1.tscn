@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Floor.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Torch.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Objects/Small_crate_0.tscn" type="PackedScene" id=4]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+
+func _ready():
+	pass
+"
+
+[node name="Node2D" type="Node2D" index="0"]
+
+script = SubResource( 1 )
+_sections_unfolded = [ "Material", "Transform", "Visibility" ]
+
+[node name="Player" parent="." index="0" instance=ExtResource( 1 )]
+
+position = Vector2( 76, 144 )
+
+[node name="Floor" parent="." index="1" instance=ExtResource( 2 )]
+
+position = Vector2( 48, 164 )
+
+[node name="Floor2" parent="." index="2" instance=ExtResource( 2 )]
+
+position = Vector2( 16, 164 )
+
+[node name="Floor3" parent="." index="3" instance=ExtResource( 2 )]
+
+position = Vector2( 104, 164 )
+
+[node name="Floor4" parent="." index="4" instance=ExtResource( 2 )]
+
+position = Vector2( 136, 164 )
+
+[node name="Floor5" parent="." index="5" instance=ExtResource( 2 )]
+
+position = Vector2( 168, 148 )
+
+[node name="Floor6" parent="." index="6" instance=ExtResource( 2 )]
+
+position = Vector2( -16, 164 )
+
+[node name="Floor7" parent="." index="7" instance=ExtResource( 2 )]
+
+position = Vector2( 72, 164 )
+
+[node name="Torch2" parent="." index="8" instance=ExtResource( 3 )]
+
+position = Vector2( 152, 112 )
+
+[node name="Torch" parent="." index="9" instance=ExtResource( 3 )]
+
+position = Vector2( 56, 116 )
+
+[node name="Small_crate_0" parent="." index="10" instance=ExtResource( 4 )]
+
+position = Vector2( 116, 148 )
+
+[node name="Small_crate_1" parent="." index="11" instance=ExtResource( 4 )]
+
+position = Vector2( 168, 132 )
+
+
