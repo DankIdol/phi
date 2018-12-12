@@ -65,15 +65,17 @@ func _process(delta):
 		state.leap_timer_tick = false
 		$Timer.start()
 		if state.can_leap_r:
-			$AnimatedSprite.play('leap')
-			velocity.y = LEAP_Y
-			velocity.x = LEAP_X
+			translate(Vector2((2 * 32), 0))
 			state.can_leap_r = false
+#			$AnimatedSprite.play('leap')
+#			velocity.y = LEAP_Y
+#			velocity.x = LEAP_X
 		if state.can_leap_l:
-			$AnimatedSprite.play('leap')
-			velocity.y = LEAP_Y
-			velocity.x = -LEAP_X
+			translate(Vector2(-(1.5 * 32), 0))
 			state.can_leap_l = false
+#			$AnimatedSprite.play('leap')
+#			velocity.y = LEAP_Y
+#			velocity.x = -LEAP_X
 	elif not Input.is_key_pressed(KEYS.W) and state.leaping:
 		state.leaping = false
 
@@ -103,10 +105,10 @@ func _physics_process(delta):
 	else:
 		$LightOccluder2D.show()
 	
-	if state.leaping:
-		$PlayerCollider.disabled = true
-	if state.leap_timer_tick:
-		$PlayerCollider.disabled = false
+#	if state.leaping:
+#		$PlayerCollider.disabled = true
+#	if state.leap_timer_tick:
+#		$PlayerCollider.disabled = false
 	
 	move_and_slide(velocity, FLOOR)
 	
@@ -115,15 +117,24 @@ func _physics_process(delta):
 func state_set():
 	state.stationary = not (state.blending or state.leaping or state.moving or state.focusing) and is_on_floor()
 	
-	state.visibility = rand_range(0,100)
 	var tex
 	if state.visibility < 10:
-		tex = load('res://sprites/objects/visibility_0.png')
+		tex = load('res://sprites/objects/Player_icons/visibility_0.png')
 	elif state.visibility < 50:
-		tex = load('res://sprites/objects/visibility_1.png')
+		tex = load('res://sprites/objects/Player_icons/visibility_1.png')
 	else:
-		tex = load('res://sprites/objects/visibility_2.png')
+		tex = load('res://sprites/objects/Player_icons/visibility_2.png')
 	$Visibility.texture = tex
+	
+	if state.can_leap_l:
+		$Arrow.rotation = -45
+		$Arrow.show()
+	elif state.can_leap_r:
+		$Arrow.rotation = 45
+		$Arrow.show()
+	else:
+		$Arrow.rotation = 0
+		$Arrow.hide()
 
 # EVENTS ----------------------
 
@@ -142,7 +153,7 @@ func _on_ColliderL_body_entered(body):
 		state.can_leap_l = true
 func _on_ColliderL_body_exited(body):
 	if "Leapable".match(body.get_name()):
-		state.can_leap_l = true
+		state.can_leap_l = false
 
 func _on_Timer_timeout():
 	state.leap_timer_tick = true
