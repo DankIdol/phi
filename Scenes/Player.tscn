@@ -1,47 +1,64 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://sprites/objects/visibility_2.png" type="Texture" id=2]
-[ext_resource path="res://sprites/player/ghost_07.png" type="Texture" id=3]
-[ext_resource path="res://sprites/player/ghost_08.png" type="Texture" id=4]
-[ext_resource path="res://sprites/player/ghost_09.png" type="Texture" id=5]
-[ext_resource path="res://sprites/player/ghost_00.png" type="Texture" id=6]
-[ext_resource path="res://sprites/player/ghost_01.png" type="Texture" id=7]
-[ext_resource path="res://sprites/player/ghost_02.png" type="Texture" id=8]
-[ext_resource path="res://sprites/player/ghost_03.png" type="Texture" id=9]
-[ext_resource path="res://sprites/player/ghost_10.png" type="Texture" id=10]
-[ext_resource path="res://sprites/player/ghost_11.png" type="Texture" id=11]
-[ext_resource path="res://sprites/player/ghost_04.png" type="Texture" id=12]
-[ext_resource path="res://sprites/player/ghost_06.png" type="Texture" id=13]
-[ext_resource path="res://sprites/player/ghost_05.png" type="Texture" id=14]
+[ext_resource path="res://sprites/objects/Player_icons/visibility_2.png" type="Texture" id=2]
+[ext_resource path="res://sprites/objects/Player_icons/arrow_0.png" type="Texture" id=3]
+[ext_resource path="res://sprites/player/ghost_07.png" type="Texture" id=4]
+[ext_resource path="res://sprites/player/ghost_08.png" type="Texture" id=5]
+[ext_resource path="res://sprites/player/ghost_09.png" type="Texture" id=6]
+[ext_resource path="res://sprites/player/ghost_00.png" type="Texture" id=7]
+[ext_resource path="res://sprites/player/ghost_01.png" type="Texture" id=8]
+[ext_resource path="res://sprites/player/ghost_02.png" type="Texture" id=9]
+[ext_resource path="res://sprites/player/ghost_03.png" type="Texture" id=10]
+[ext_resource path="res://sprites/player/ghost_13.png" type="Texture" id=11]
+[ext_resource path="res://sprites/player/ghost_14.png" type="Texture" id=12]
+[ext_resource path="res://sprites/player/ghost_15.png" type="Texture" id=13]
+[ext_resource path="res://sprites/player/ghost_16.png" type="Texture" id=14]
+[ext_resource path="res://sprites/player/ghost_17.png" type="Texture" id=15]
+[ext_resource path="res://sprites/player/ghost_10.png" type="Texture" id=16]
+[ext_resource path="res://sprites/player/ghost_11.png" type="Texture" id=17]
+[ext_resource path="res://sprites/player/ghost_04.png" type="Texture" id=18]
+[ext_resource path="res://sprites/player/ghost_06.png" type="Texture" id=19]
+[ext_resource path="res://sprites/player/ghost_05.png" type="Texture" id=20]
+[ext_resource path="res://sprites/player/ghost_18.png" type="Texture" id=21]
 
 [sub_resource type="SpriteFrames" id=1]
 
 animations = [ {
-"frames": [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ) ],
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ) ],
 "loop": false,
 "name": "blend",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 6 ), ExtResource( 7 ) ],
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
 "loop": true,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 10 ) ],
 "loop": false,
 "name": "focus",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 10 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 11 ) ],
+"frames": [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ) ],
+"loop": false,
+"name": "vanish",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 16 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 17 ) ],
 "loop": false,
 "name": "leap",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 14 ) ],
+"frames": [ ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 20 ) ],
 "loop": true,
 "name": "walk",
 "speed": 10.0
+}, {
+"frames": [ ExtResource( 21 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "appear",
+"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -74,28 +91,32 @@ _sections_unfolded = [ "Material", "Z Index" ]
 position = Vector2( 0, -25 )
 texture = ExtResource( 2 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="1"]
+[node name="Arrow" type="Sprite" parent="." index="1"]
+
+position = Vector2( 0, -24 )
+texture = ExtResource( 3 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="2"]
 
 frames = SubResource( 1 )
 animation = "idle"
-frame = 1
 playing = true
 _sections_unfolded = [ "Z Index" ]
 
-[node name="PlayerCollider" type="CollisionShape2D" parent="." index="2"]
+[node name="PlayerCollider" type="CollisionShape2D" parent="." index="3"]
 
 position = Vector2( -0.5, 0 )
 scale = Vector2( 0.954545, 1 )
 shape = SubResource( 2 )
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="." index="3"]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." index="4"]
 
 light_mask = 3
 occluder = SubResource( 3 )
 light_mask = 3
 _sections_unfolded = [ "Z Index" ]
 
-[node name="Camera2D" type="Camera2D" parent="." index="4"]
+[node name="Camera2D" type="Camera2D" parent="." index="5"]
 
 anchor_mode = 1
 rotating = false
@@ -121,7 +142,7 @@ editor_draw_limits = false
 editor_draw_drag_margin = false
 _sections_unfolded = [ "Limit", "Smoothing" ]
 
-[node name="ColliderR" type="Area2D" parent="." index="5"]
+[node name="ColliderR" type="Area2D" parent="." index="6"]
 
 position = Vector2( 11, 7 )
 scale = Vector2( 0.09375, 0.265625 )
@@ -143,7 +164,7 @@ __meta__ = {
 position = Vector2( -21.3333, 1.90735e-06 )
 shape = SubResource( 4 )
 
-[node name="ColliderL" type="Area2D" parent="." index="6"]
+[node name="ColliderL" type="Area2D" parent="." index="7"]
 
 editor/display_folded = true
 position = Vector2( -12, 7 )
@@ -166,15 +187,15 @@ __meta__ = {
 position = Vector2( 21.3333, 0 )
 shape = SubResource( 4 )
 
-[node name="Timer" type="Timer" parent="." index="7"]
+[node name="Timer" type="Timer" parent="." index="8"]
 
 process_mode = 1
-wait_time = 0.25
+wait_time = 0.4
 one_shot = true
 autostart = false
 _sections_unfolded = [ "Pause" ]
 
-[node name="Debug" type="Label" parent="." index="8"]
+[node name="Debug" type="Label" parent="." index="9"]
 
 anchor_left = 0.0
 anchor_top = 0.0

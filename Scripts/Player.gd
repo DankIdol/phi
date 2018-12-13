@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal test
+
 const GRAVITY = 10
 const SLIDE = 5
 const LEAP_X = 175
@@ -19,7 +21,6 @@ var state = {
 	stationary = true,
 	can_leap_r = false,
 	can_leap_l = false,
-	leap_timer_tick = false,
 	leaping = false,
 	focusing = false,
 	blending = false,
@@ -63,23 +64,14 @@ func _process(delta):
 		 and (state.can_leap_l or state.can_leap_r) and state.stationary:
 		state.leaping = true
 		state.leap_timer_tick = false
-		$Timer.start()
 		if state.can_leap_r:
-			translate(Vector2((2 * 32), 0))
-			state.can_leap_r = false
-#			$AnimatedSprite.play('leap')
-#			velocity.y = LEAP_Y
-#			velocity.x = LEAP_X
+			$Timer.start()
+			$AnimatedSprite.play('vanish')
 		if state.can_leap_l:
-			translate(Vector2(-(1.5 * 32), 0))
-			state.can_leap_l = false
-#			$AnimatedSprite.play('leap')
-#			velocity.y = LEAP_Y
-#			velocity.x = -LEAP_X
-	elif not Input.is_key_pressed(KEYS.W) and state.leaping:
-		state.leaping = false
+			$Timer.start()
+			$AnimatedSprite.play('vanish')
 
-	else:
+	elif not state.leaping:
 		state.moving = false
 		state.blending = false
 		state.focusing = false
@@ -146,8 +138,7 @@ func _on_ColliderR_body_exited(body):
 		state.can_leap_r = false
 
 func _on_ColliderL_body_entered(body):
-	if "Closet".match(body.get_name()):
-		body.get_parent().player_enter()
+	emit_signal('test')
 		
 	if "Leapable".match(body.get_name()):
 		state.can_leap_l = true
@@ -156,4 +147,11 @@ func _on_ColliderL_body_exited(body):
 		state.can_leap_l = false
 
 func _on_Timer_timeout():
-	state.leap_timer_tick = true
+	$AnimatedSprite.play('appear')
+	if state.can_leap_r:
+		translate(Vector2((2 * 32), 0))
+		state.can_leap_r = false
+	if state.can_leap_l:
+		translate(Vector2((-1.5 * 32), 0))
+		state.can_leap_l = false
+	state.leaping = false

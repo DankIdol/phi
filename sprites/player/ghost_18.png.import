@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/visibility_2.png-32a4ea4128f3b514a4a2df616569dec7.stex"
+path="res://.import/ghost_18.png-90854009ca46a1e83dc033c4902c26bc.stex"
 
 [deps]
 
-source_file="res://sprites/objects/visibility_2.png"
-dest_files=[ "res://.import/visibility_2.png-32a4ea4128f3b514a4a2df616569dec7.stex" ]
+source_file="res://sprites/player/ghost_18.png"
+dest_files=[ "res://.import/ghost_18.png-90854009ca46a1e83dc033c4902c26bc.stex" ]
 
 [params]
 

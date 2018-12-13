@@ -35,7 +35,7 @@ _sections_unfolded = [ "Material", "Transform", "Visibility" ]
 
 [node name="Player" parent="." index="0" instance=ExtResource( 1 )]
 
-position = Vector2( 128, 96 )
+position = Vector2( 160, 96 )
 
 [node name="Floor" parent="." index="1" instance=ExtResource( 2 )]
 
@@ -71,7 +71,7 @@ position = Vector2( 236, 60 )
 
 [node name="Torch" parent="." index="9" instance=ExtResource( 3 )]
 
-position = Vector2( 108, 80 )
+position = Vector2( 208, 64 )
 
 [node name="Small_crate_0" parent="." index="10" instance=ExtResource( 4 )]
 
@@ -87,5 +87,9 @@ _sections_unfolded = [ "Z Index" ]
 position = Vector2( 80, 96 )
 z_index = -1
 _sections_unfolded = [ "Z Index" ]
+
+[node name="Closet2" parent="." index="13" instance=ExtResource( 5 )]
+
+position = Vector2( 112, 96 )
 
 
