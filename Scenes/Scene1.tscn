@@ -24,9 +24,15 @@ shader = SubResource( 1 )
 
 script/source = "extends Node2D
 
+var timer = 1
+
 func _ready():
-	#$AudioStreamPlayer.playing = true
-	pass"
+	pass
+	
+func _process(delta):
+	timer = timer - delta
+	if timer < 0 and not $AudioStreamPlayer.playing:
+		$AudioStreamPlayer.playing = true"
 
 [node name="Node2D" type="Node2D" index="0"]
 
