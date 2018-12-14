@@ -1,14 +1,21 @@
 extends Node2D
 
+var active = false
+
+func _process(delta):
+	$Label.text = '^' if active else '-'
+
 func _ready():
-	get_parent().get_child(0).connect('test', self, '_test')
+	get_parent().get_child(0).connect('_hide', self, '_hide')
 
-func _test():
-	print('asd')
-
-func player_enter():
-	$AnimatedSprite.play('open')
+func _hide():
+	pass
 
 func _on_Area2D_body_entered(body):
 	if body.get_name().match('Player'):
-		player_enter()
+		active = true
+
+func _on_Area2D_body_exited(body):
+	if body.get_name().match('Player'):
+		active = false
+

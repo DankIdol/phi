@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-signal test
+signal _hide
 
 const GRAVITY = 10
 const SLIDE = 5
@@ -64,6 +64,7 @@ func _process(delta):
 		 and (state.can_leap_l or state.can_leap_r) and state.stationary:
 		state.leaping = true
 		state.leap_timer_tick = false
+		velocity.x = 0
 		if state.can_leap_r:
 			$Timer.start()
 			$AnimatedSprite.play('vanish')
@@ -96,18 +97,16 @@ func _physics_process(delta):
 		$LightOccluder2D.hide()
 	else:
 		$LightOccluder2D.show()
-	
-#	if state.leaping:
-#		$PlayerCollider.disabled = true
-#	if state.leap_timer_tick:
-#		$PlayerCollider.disabled = false
-	
+
 	move_and_slide(velocity, FLOOR)
 	
 # STATE -----------------------
 
 func state_set():
 	state.stationary = not (state.blending or state.leaping or state.moving or state.focusing) and is_on_floor()
+	
+	if $AnimatedSprite.animation == 'appear' and $AnimatedSprite.frame == 5:
+		state.leaping = false
 	
 	var tex
 	if state.visibility < 10:
@@ -138,7 +137,7 @@ func _on_ColliderR_body_exited(body):
 		state.can_leap_r = false
 
 func _on_ColliderL_body_entered(body):
-	emit_signal('test')
+	emit_signal('_hide')
 		
 	if "Leapable".match(body.get_name()):
 		state.can_leap_l = true
@@ -154,4 +153,3 @@ func _on_Timer_timeout():
 	if state.can_leap_l:
 		translate(Vector2((-1.5 * 32), 0))
 		state.can_leap_l = false
-	state.leaping = false
