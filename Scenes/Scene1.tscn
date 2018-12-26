@@ -30,11 +30,12 @@ func _ready():
 	pass
 	
 func _process(delta):
-	timer = timer - delta
-	if timer < 0 and not $AudioStreamPlayer.playing:
-		$AudioStreamPlayer.playing = true"
+#	timer = timer - delta
+#	if timer < 0 and not $AudioStreamPlayer.playing:
+#		$AudioStreamPlayer.playing = true
+	pass"
 
-[node name="Node2D" type="Node2D" index="0"]
+[node name="Node2D" type="Node2D"]
 
 material = SubResource( 2 )
 script = SubResource( 3 )
@@ -78,7 +79,7 @@ position = Vector2( 236, 60 )
 
 [node name="Torch" parent="." index="9" instance=ExtResource( 3 )]
 
-position = Vector2( 208, 64 )
+position = Vector2( 96, 48 )
 
 [node name="Small_crate_0" parent="." index="10" instance=ExtResource( 4 )]
 

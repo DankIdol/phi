@@ -18,14 +18,17 @@ const KEYS = {
 var velocity = Vector2()
 var movespeed = 30
 var state = {
+	waiting_input = true,
 	stationary = true,
 	can_leap_r = false,
 	can_leap_l = false,
 	leaping = false,
+	can_hide = false,
+	hiding = false,
 	focusing = false,
 	blending = false,
 	moving = false,
-	facing = "r",
+	facing = 'r',
 	visibility = 0
 }
 
@@ -33,7 +36,10 @@ func _ready():
 	pass
 	
 func _process(delta):
-
+	if state.waiting_input:
+		get_input()
+	
+func get_input():
 	if Input.is_key_pressed(KEYS.A) and state.stationary:
 		state.moving = true
 		state.facing = 'l'
@@ -60,17 +66,28 @@ func _process(delta):
 		velocity.x = 0
 		$AnimatedSprite.play('focus')
 
-	elif Input.is_key_pressed(KEYS.W) and not state.leaping\
-		 and (state.can_leap_l or state.can_leap_r) and state.stationary:
-		state.leaping = true
-		state.leap_timer_tick = false
-		velocity.x = 0
-		if state.can_leap_r:
-			$Timer.start()
-			$AnimatedSprite.play('vanish')
-		if state.can_leap_l:
-			$Timer.start()
-			$AnimatedSprite.play('vanish')
+	elif Input.is_key_pressed(KEYS.W):
+		if not state.leaping and (state.can_leap_l or state.can_leap_r) and state.stationary:
+			state.waiting_input = false
+			state.leaping = true
+			state.leap_timer_tick = false
+			velocity.x = 0
+			if state.can_leap_r:
+				$LeapTimer.start()
+				$AnimatedSprite.play('vanish')
+			if state.can_leap_l:
+				$LeapTimer.start()
+				$AnimatedSprite.play('vanish')
+				
+		if state.can_hide and not state.hiding:
+			state.waiting_input = false
+			$AnimatedSprite.play('interact')
+			$HideTimer.start()
+			emit_signal('_hide')
+		elif state.hiding:
+			state.waiting_input = false
+			$HideTimer.start()
+			emit_signal('_hide')
 
 	elif not state.leaping:
 		state.moving = false
@@ -103,10 +120,19 @@ func _physics_process(delta):
 # STATE -----------------------
 
 func state_set():
-	state.stationary = not (state.blending or state.leaping or state.moving or state.focusing) and is_on_floor()
+	state.stationary = not (state.blending or state.leaping or \
+						state.moving or state.focusing or state.hiding)\
+						and is_on_floor()
 	
 	if $AnimatedSprite.animation == 'appear' and $AnimatedSprite.frame == 5:
 		state.leaping = false
+	
+	if state.hiding:
+		$AnimatedSprite.hide()
+		$LightOccluder2D.hide()
+	else:
+		$AnimatedSprite.show()
+		$LightOccluder2D.show()
 	
 	var tex
 	if state.visibility < 10:
@@ -123,6 +149,9 @@ func state_set():
 	elif state.can_leap_r:
 		$Arrow.rotation = 45
 		$Arrow.show()
+	elif state.can_hide and not state.hiding:
+		$Arrow.rotation = 0
+		$Arrow.show()
 	else:
 		$Arrow.rotation = 0
 		$Arrow.hide()
@@ -130,22 +159,29 @@ func state_set():
 # EVENTS ----------------------
 
 func _on_ColliderR_body_entered(body):
-	if "Leapable".match(body.get_name()):
+	if 'Closet'.match(body.get_name()):
+		state.can_hide = true
+	if 'Leapable'.match(body.get_name()):
 		state.can_leap_r = true
 func _on_ColliderR_body_exited(body):
-	if "Leapable".match(body.get_name()):
+	if 'Closet'.match(body.get_name()):
+		state.can_hide = false
+	if 'Leapable'.match(body.get_name()):
 		state.can_leap_r = false
 
 func _on_ColliderL_body_entered(body):
-	emit_signal('_hide')
-		
-	if "Leapable".match(body.get_name()):
+	if 'Closet'.match(body.get_name()):
+		state.can_hide = true
+	if 'Leapable'.match(body.get_name()):
 		state.can_leap_l = true
 func _on_ColliderL_body_exited(body):
-	if "Leapable".match(body.get_name()):
+	if 'Closet'.match(body.get_name()):
+		state.can_hide = false
+	if 'Leapable'.match(body.get_name()):
 		state.can_leap_l = false
 
-func _on_Timer_timeout():
+func _on_LeapTimer_timeout():
+	state.waiting_input = true
 	$AnimatedSprite.play('appear')
 	if state.can_leap_r:
 		translate(Vector2((2 * 32), 0))
@@ -153,3 +189,7 @@ func _on_Timer_timeout():
 	if state.can_leap_l:
 		translate(Vector2((-1.5 * 32), 0))
 		state.can_leap_l = false
+
+func _on_HideTimer_timeout():
+	state.waiting_input = true
+	state.hiding = not state.hiding
